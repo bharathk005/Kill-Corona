@@ -1,0 +1,45 @@
+.button {
+    padding: 15px 25px;
+    font-size: 24px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: #fff;
+    background-color: #008CBA;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+    /* position: absolute; */
+    /* top: 50%; */
+  }
+  
+  .button:hover {background-color: rgb(5, 103, 136)}
+  
+  .button:active {
+    background-color: rgb(5, 103, 136);
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+  }
+  .mtext{
+    padding: 10px 10px 10px;
+
+    background-color: #CEF0D4;
+    text-align: center;
+    width: 40%;
+    margin: 10px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .mtext .tt{
+    /* text-align: center; */
+    font-size: 24px;
+    color: rgb(99, 168, 112);
+  }
+  .mtext .tn{
+    font-size: 24px;
+    color: rgb(212, 173, 115);
+  }
+#bp{
+    text-align: center;
+    
+}

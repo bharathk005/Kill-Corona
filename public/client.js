@@ -90,15 +90,27 @@ function addUser(){
     });
 }
 
-function insertImg(src,parent){
+function insertImg(src,parent,animation,width,height,message){
   var img = document.createElement("img");
-  img.setAttribute('class','img')
+  img.setAttribute('class',animation)
   img.setAttribute('id','tempImg');
+  img.width = width;
+  img.height = height;
   img.src = src;
-  document.getElementById(parent).appendChild(img);
+  img.addEventListener('click',cupd)
+  var pt = document.getElementById(parent);
+  var chat = document.getElementById("chat");
+  chat.textContent = message;
+  // var x = pt.offsetTop - pt.height;
+  // var y = pt.offsetLeft + pt.width;
+  // img.style.left = '' + x + 'px' ;
+  // // img.style.top = '' + y + 'px' ;
+  // img.offsetTop = x;
+  // img.offsetLeft = y;
+   document.getElementById(parent).appendChild(img);
   setTimeout(function(){
     document.getElementById("tempImg").remove();
-  },3000);
+  },5000);
 }
 
 
@@ -123,6 +135,9 @@ $(document).ready(function(){
     pt.innerHTML = count;
     setInterval(poll,500);
     setTimeout(function(){
-            insertImg("./res/N2.jpg","mtextid");
+            insertImg("./res/N31.png","rtxt","fade",100,150,"NAMASTE!");
         },2000);
+    // setTimeout(function(){
+    //       insertImg("./res/T1.png","rtxt","fade",200,200);
+    //   },2000);
   });

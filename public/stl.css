@@ -1,3 +1,39 @@
+@keyframes imgfade{
+  0% {opacity: 0.5;}
+  25% {opacity: 1;}
+  75% {opacity: 0.5;}
+  100% {opacity: 0;}
+}
+
+.dcountries{
+  width: 30%;
+  padding: 5px 5px 5px;
+  background-color: #999;
+
+  float: left;
+}
+
+.chart {
+  width: 100%; /* Full width */
+  background-color: #ddd; /* Grey background */
+}
+
+.C {
+  text-align: right; /* Right-align text */
+  padding-top: 5px; /* Add top padding */
+  padding-bottom: 5px; /* Add bottom padding */
+  color: white; /* White text color */
+}
+
+.dcountries p{
+  margin-top: 5px;
+  margin-bottom: 0px;
+}
+
+.IND {width: 90%; background-color: #4CAF50;} /* Green */
+.USA {width: 80%; background-color: #2196F3;} /* Blue */
+.AUS {width: 65%; background-color: #f44336;} /* Red */
+
 .button {
     padding: 15px 25px;
     font-size: 24px;
@@ -20,15 +56,17 @@
     box-shadow: 0 5px #666;
     transform: translateY(4px);
   }
-  .mtext{
-    padding: 10px 10px 10px;
-
-    background-color: #CEF0D4;
-    text-align: center;
-    width: 40%;
+  .btntxt{
+    float: left;
+    width: 35%;
     margin: 10px;
     margin-left: auto;
     margin-right: auto;
+    text-align: center;
+  }
+  .mtext{
+    padding: 10px 10px 10px;
+    background-color: #CEF0D4;
   }
   .mtext .tt{
     /* text-align: center; */
@@ -40,6 +78,13 @@
     color: rgb(212, 173, 115);
   }
 #bp{
+    margin-top: 5px;
     text-align: center;
     
+}
+
+.img{
+  position: absolute;
+  animation-name: imgfade;
+  animation-duration: 3.5s;
 }

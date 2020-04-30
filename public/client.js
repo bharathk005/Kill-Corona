@@ -90,11 +90,24 @@ function addUser(){
     });
 }
 
+function insertImg(src,parent){
+  var img = document.createElement("img");
+  img.setAttribute('class','img')
+  img.setAttribute('id','tempImg');
+  img.src = src;
+  document.getElementById(parent).appendChild(img);
+  setTimeout(function(){
+    document.getElementById("tempImg").remove();
+  },3000);
+}
+
+
 $(document).ready(function(){
     document.getElementById("waste").addEventListener('click',cupd);
     gt = document.getElementById("gt");
     av = document.getElementById("av");
     pt = document.getElementById("pt");
+    
     cookie = getCookie("wtdmts2020")
     if(cookie != ""){
         console.log("cookie:" + cookie);
@@ -109,5 +122,7 @@ $(document).ready(function(){
     }
     pt.innerHTML = count;
     setInterval(poll,500);
-    
+    setTimeout(function(){
+            insertImg("./res/N2.jpg","mtextid");
+        },2000);
   });

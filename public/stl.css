@@ -6,10 +6,10 @@
 }
 
 @keyframes imgtrans{
-0% {transform: translateY(-50px);}
-25% {transform: translateY(-70px);}
-75% {transform: translateY(-90px);}
-100% {transform: translateY(-100px);}
+0% {transform: translateY(-90px);}
+25% {transform: translateY(-110px);}
+75% {transform: translateY(-130px);}
+100% {transform: translateY(-150px);}
 }
 
 
@@ -32,6 +32,7 @@
   padding-top: 5px; /* Add top padding */
   padding-bottom: 5px; /* Add bottom padding */
   color: white; /* White text color */
+  background-color: rgb(49, 141, 218);
 }
 
 .dcountries p{
@@ -39,9 +40,9 @@
   margin-bottom: 0px;
 }
 
-.IND {width: 90%; background-color: #4CAF50;} /* Green */
-.USA {width: 80%; background-color: #2196F3;} /* Blue */
-.AUS {width: 65%; background-color: #f44336;} /* Red */
+.IND {width: 90%; background-color: rgb(208, 211, 57);} /* Green */
+.USA {width: 80%; background-color: rgb(49, 141, 218);} /* Blue */
+.AUS {width: 65%; background-color: #2bb33d;} /* Red */
 
 .button {
     padding: 15px 25px;
@@ -92,8 +93,8 @@
 
 }
 
-.heading h2{
-  color: aqua;
+.heading{
+  color: rgb(54, 139, 218);
   font-style: oblique;
 }
 
@@ -103,7 +104,7 @@
   font-family: "Times New Roman";
   color: #4CAF50;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 24px;
   /* text-shadow: 2px 2px red; */
 }
 

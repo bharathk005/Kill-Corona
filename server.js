@@ -10,6 +10,15 @@ let db;
 
 const url =  'mongodb://localhost:27017/countdb';
 
+function getReg(){
+  var temp = Math.floor(Math.random() * Math.floor(3)) + 1;
+  switch(temp){
+    case 1: return "IND";
+    case 2: return "AUS";
+    case 3: return "USA";
+  }
+}
+
 MongoClient.connect(url, (err, database) => {
     if(err) {
       return console.log(err);
@@ -33,6 +42,15 @@ app.post('/clicked', (req, res) => {
           return console.log(err);
         }
         console.log('click added to db');
+        
+      });
+    var reg = getReg();
+    console.log(reg);
+    db.collection('reg').updateOne({"name": reg},{ $inc: {"val":1}},{ upsert : true }, (err, result) => {
+        if (err) {
+          return console.log(err);
+        }
+        console.log('reg added to db');
         
       });
     
@@ -96,6 +114,14 @@ app.post('/clicked', (req, res) => {
   app.get('/clicks', (req, res) => {
 
     db.collection('clicks').find().toArray((err, result) => {
+      if (err) return console.log(err);
+      res.send(result);
+    });
+  });
+
+  app.get('/reg', (req, res) => {
+
+    db.collection('reg').find().toArray((err, result) => {
       if (err) return console.log(err);
       res.send(result);
     });

@@ -14,6 +14,9 @@ var ctran = 0;
 var cspacewidth = 0;
 var soapimpact = false;
 var waterimpact = false;
+var kills = 0;
+var clicksperkill = 0;
+var splashdelay = 2000;
 
 function addComma() { 
 
@@ -227,7 +230,7 @@ function story(){
   }
 }
 
-function createsplash(id){
+function createsplashw(id){
   var element = document.getElementById(id);
   var topPos = element.getBoundingClientRect().top ;
   var leftPos = element.getBoundingClientRect().left ;
@@ -242,16 +245,39 @@ function createsplash(id){
   document.body.appendChild(splash);
   setTimeout(function(){
     document.getElementById('splash'+id).remove();
-    id == 'tempw'? waterimpact = false : soapimpact = false;
+  },splashdelay);
+}
+
+function createsplashs(id){
+  var element = document.getElementById(id);
+  var topPos = element.getBoundingClientRect().top ;
+  var leftPos = element.getBoundingClientRect().left ;
+  var splash = document.createElement('img');
+  splash.setAttribute('class','wsfade');
+  splash.setAttribute('id','splash'+id);
+  splash.style.left = leftPos +'px';
+  splash.style.top = topPos +'px';
+  splash.width = 40;
+  splash.height = 60;
+  splash.src = "./res/"+id+".png";
+  document.body.appendChild(splash);
+  setTimeout(function(){
+    document.getElementById('splash'+id).remove();
+  },splashdelay);
+}
+
+function resetImpact(id){
+    id =='tempw'? waterimpact = false: soapimpact = false;
     document.getElementById("coronaspace").style.backgroundColor = "bisque";
     document.getElementById("comment").textContent = "Try Again! you need be faster than corona."
     comment.style.backgroundColor = "white";
-  },2000);
 }
 
 function removedrop(id){
   var drop = document.getElementById(id);
-  createsplash(id);
+  if(id =='tempw'){createsplashw(id);}
+  else if(id =='temps'){createsplashs(id);}
+  
   drop.remove();
  
 }
@@ -267,6 +293,9 @@ function killed(){
     document.getElementById("coronaspace").style.backgroundColor = "green";
     comment.textContent = "Well Done! You killed one corona virus.";
     comment.style.backgroundColor = "green";
+    kills++;
+    //call server to udpate kills, clicks per kill. 
+    //update cookie.
 }
 
 function movedrop(id){
@@ -284,6 +313,7 @@ function movedrop(id){
     console.log(droppos.left - cleft);
     if( -25 < (droppos.left-cleft) && (droppos.left-cleft) <25){
         id =='tempw'? waterimpact = true: soapimpact = true;
+        setTimeout(resetImpact,splashdelay,id);
         var comment = document.getElementById("comment");
         if(waterimpact && soapimpact){
           killed()

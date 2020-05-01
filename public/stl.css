@@ -121,7 +121,7 @@
 .wsfade{
   position: absolute;
   animation-name: imgfade;
-  animation-duration: 2s;
+  animation-duration: 2.5s;
 }
 
 .waterclass{

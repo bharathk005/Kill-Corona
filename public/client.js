@@ -5,9 +5,11 @@ var count = 0;
 var gt,av,pt;
 var wait = false;
 var seq = 1;
+var cseq = 1;
 var play = true;
 var winterval;
 var sinterval;
+var cinterval;
 var wtran;
 var stran;
 var ctran = 0;
@@ -17,8 +19,8 @@ var waterimpact = false;
 var kills = 0;
 var clicksperkill = 0;
 var splashdelay = 2000;
-
-var killtest = 25;
+var level = 1;
+var killtest = 100; //25
 
 function addComma() { 
 
@@ -171,7 +173,8 @@ function insertImg(src,parent,animation,width,height,message){
    document.getElementById(parent).appendChild(img);
   setTimeout(function(){
     document.getElementById("tempImg").remove();
-    seq++;
+    chat.textContent = "";
+    cseq++;
     wait = false;
   },5000);
 }
@@ -288,12 +291,45 @@ function getcoronapos(){
   return leftPos;
 }
 
+function celebration(){
+  if(cseq == 1){
+    wait = true;
+    setTimeout(function(){
+      insertImg("./res/T3.png","coronaspace","fade",100,150,"Wohoo! We are saved! Thanks buddy!");
+  },2000);
+   }
+
+   if(cseq == 2){
+     wait = true;
+    setTimeout(function(){
+      insertImg("./res/N3.png","coronaspace","fade",100,150,"Thanks.. Well Done.");
+  },2000);
+   }
+
+  if(cseq == 3){
+    wait = true;
+   setTimeout(function(){
+     insertImg("./res/T1.png","coronaspace","fade",100,150,"I appreciate it..");
+ },2000);
+  }
+}
+
+function destroycorona(){
+   var corona = document.getElementById("cimg");
+   corona.src = "./res/corona2killed.png";
+   
+ setTimeout(function(){
+    corona.remove()
+ },2000);
+}
+
 function killed(){
+   clearInterval(cinterval);
     document.getElementById("coronaspace").style.backgroundColor = "green";
     comment.textContent = "Well Done! You killed one corona virus.";
     comment.style.backgroundColor = "green";
     kills++;
-    pt.innerHTML = Number(kills).toLocaleString('en-US')
+    pt.innerHTML = Number(kills).toLocaleString('en-US');
     fetch('/killed', {method: 'POST'})
     .then(function(response) {
       if(response.ok) {
@@ -305,7 +341,12 @@ function killed(){
     .catch(function(error) {
       console.log(error);
     });
-    addCookie("killcor2020kills",kills.toString(),365)
+    addCookie("killcor2020kills",kills.toString(),365);
+    destroycorona();
+    celebration();
+    setTimeout(function(){
+      createcorona();
+   },8000);
 }
 
 function movedrop(id){
@@ -395,13 +436,16 @@ function createcorona(){
     cspacewidth = parseInt(properties.width);
    var topPos = cspace.getBoundingClientRect().top;
    var leftPos = cspace.getBoundingClientRect().left;
-   var corona = document.getElementById("cimg");
+   var corona = document.createElement("img");
+   corona.setAttribute('class','cimg');
+   corona.setAttribute('id','cimg');
    corona.style.left = leftPos +'px';
    corona.style.top = topPos +'px';
    corona.width = 70;
    corona.height = 70;
    corona.src = "./res/corona2.png";
-   sinterval = setInterval(movecorona,300);
+   cspace.appendChild(corona);
+   cinterval = setInterval(movecorona,300);
 }
 
 $(document).ready(function(){
@@ -433,8 +477,8 @@ $(document).ready(function(){
     setInterval(pollkills,500);
     //setInterval(pollreg,500);
     pollreg();
-    if(play){
-    setInterval(story,500);
-    }
+    // if(play){
+    // setInterval(story,500);
+    // }
     createcorona();
   });

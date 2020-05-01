@@ -8,6 +8,12 @@ var seq = 1;
 var play = true;
 var winterval;
 var sinterval;
+var wtran;
+var stran;
+var ctran = 0;
+var cspacewidth = 0;
+var soapimpact = false;
+var waterimpact = false;
 
 function addComma() { 
 
@@ -221,13 +227,46 @@ function story(){
   }
 }
 
-function createsplash(){
-
+function createsplash(id){
+  var element = document.getElementById(id);
+  var topPos = element.getBoundingClientRect().top ;
+  var leftPos = element.getBoundingClientRect().left ;
+  var splash = document.createElement('img');
+  splash.setAttribute('class','wsfade');
+  splash.setAttribute('id','splash'+id);
+  splash.style.left = leftPos +'px';
+  splash.style.top = topPos +'px';
+  splash.width = 40;
+  splash.height = 60;
+  splash.src = "./res/"+id+".png";
+  document.body.appendChild(splash);
+  setTimeout(function(){
+    document.getElementById('splash'+id).remove();
+    id == 'tempw'? waterimpact = false : soapimpact = false;
+    document.getElementById("coronaspace").style.backgroundColor = "bisque";
+    document.getElementById("comment").textContent = "Try Again! you need be faster than corona."
+    comment.style.backgroundColor = "white";
+  },2000);
 }
 
-function removedrop(){
+function removedrop(id){
+  var drop = document.getElementById(id);
+  createsplash(id);
+  drop.remove();
+ 
+}
 
-  createsplash();
+function getcoronapos(){
+  var element = document.getElementById('cimg');
+ // var topPos = element.getBoundingClientRect().top;
+  var leftPos = element.getBoundingClientRect().left;
+  return leftPos;
+}
+
+function killed(){
+    document.getElementById("coronaspace").style.backgroundColor = "green";
+    comment.textContent = "Well Done! You killed one corona virus.";
+    comment.style.backgroundColor = "green";
 }
 
 function movedrop(id){
@@ -235,30 +274,51 @@ function movedrop(id){
   if(id == 'tempw'){wtran = wtran+30;drop.style.transform = "translateY(-"+wtran+"px)";}
   else if(id =='temps'){stran = stran+30;drop.style.transform = "translateY(-"+stran+"px)";}
    //"translate(x,y)"
-  console.log(drop.getBoundingClientRect().top);
-  if(drop.getBoundingClientRect().top < 100) {
+   var cleft = getcoronapos();
+   var droppos = drop.getBoundingClientRect();
+   var cspace =  document.getElementById("coronaspace");
+  if( droppos.top < cspace.getBoundingClientRect().top + 27) {
     id == 'tempw'? clearInterval(winterval):clearInterval(sinterval);
-    removedrop();
+    id =='tempw'? document.getElementById('water').disabled = false : document.getElementById('soap').disabled = false;
+    removedrop(id);
+    console.log(droppos.left - cleft);
+    if( -25 < (droppos.left-cleft) && (droppos.left-cleft) <25){
+        id =='tempw'? waterimpact = true: soapimpact = true;
+        var comment = document.getElementById("comment");
+        if(waterimpact && soapimpact){
+          killed()
+        }
+        else if(waterimpact){
+          comment.textContent = "Corona is hit by Water. Hit is with Soap before water dries out";
+          comment.style.backgroundColor = "rgb(154, 207, 243)";
+            document.getElementById("coronaspace").style.backgroundColor = "rgb(154, 207, 243)";
+        }
+        else if(soapimpact){
+          comment.textContent = "Corona is hit by SOAP. Hit is with Water before SOAP dries out";
+          comment.style.backgroundColor = "rgb(250, 121, 61)"
+          document.getElementById("coronaspace").style.backgroundColor = "rgb(250, 121, 61)";
+      }
 
+    }
+    
   }
 }
 
-var wtran;
-var stran;
+
 
 function createwaterdrop(){
   var element = document.getElementById('water');
   var topPos = element.getBoundingClientRect().top + window.scrollY - 30;
   var leftPos = element.getBoundingClientRect().left + window.scrollX + element.width;
-
+  element.disabled = true;
   var wdrop = document.createElement('img');
   wdrop.setAttribute('class','waterclass');
   wdrop.setAttribute('id','tempw');
   wdrop.style.left = leftPos +'px';
   wdrop.style.top = topPos +'px';
   wtran = 0;
-  wdrop.width = 40;
-  wdrop.height = 60;
+  wdrop.width = 30;
+  wdrop.height = 50;
   wdrop.src = "./res/wd.png";
   document.body.appendChild(wdrop);
   winterval = setInterval(movedrop,100,'tempw');
@@ -268,7 +328,7 @@ function createsoapdrop(){
   var element = document.getElementById('soap');
   var topPos = element.getBoundingClientRect().top + window.scrollY - 30;
   var leftPos = element.getBoundingClientRect().left + window.scrollX;
-
+  element.disabled = true;
   var sdrop = document.createElement('img');
   sdrop.setAttribute('class','soapclass');
   sdrop.setAttribute('id','temps');
@@ -280,6 +340,28 @@ function createsoapdrop(){
   sdrop.src = "./res/sd.png";
   document.body.appendChild(sdrop);
   sinterval = setInterval(movedrop,100,'temps');
+}
+
+function movecorona(){
+  var corona = document.getElementById("cimg");
+  var tran = Math.sin(ctran) * cspacewidth/2.5;
+  ctran = ctran + 0.3;
+  corona.style.transform = "translateX("+tran+"px)";
+}
+
+function createcorona(){
+   var cspace = document.getElementById("coronaspace");
+    properties = window.getComputedStyle(cspace, null);
+    cspacewidth = parseInt(properties.width);
+   var topPos = cspace.getBoundingClientRect().top;
+   var leftPos = cspace.getBoundingClientRect().left;
+   var corona = document.getElementById("cimg");
+   corona.style.left = leftPos +'px';
+   corona.style.top = topPos +'px';
+   corona.width = 70;
+   corona.height = 70;
+   corona.src = "./res/corona2.png";
+   sinterval = setInterval(movecorona,300);
 }
 
 $(document).ready(function(){
@@ -295,13 +377,13 @@ $(document).ready(function(){
     var listen = document.getElementById("listen");
     cookie = getCookie("wtdmts2020")
     if(cookie != ""){
-       listen.textContent = "You have already listened to the leaders. Now Waste This Moment! Consume cookie to watch again"
+     //  listen.textContent = "You have already listened to the leaders. Now Waste This Moment! Consume cookie to watch again"
         play = false;
         console.log("cookie:" + cookie);
         count = Number(cookie);        
     }
     else{
-      listen.textContent = "Listen to the leaders:"
+   //   listen.textContent = "Listen to the leaders:"
         console.log("calling to add cookie");
         addCookie("wtdmts2020","0",365);
         addUser();
@@ -314,4 +396,5 @@ $(document).ready(function(){
     if(play){
     setInterval(story,500);
     }
+    createcorona();
   });

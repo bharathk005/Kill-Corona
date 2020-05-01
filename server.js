@@ -11,11 +11,21 @@ let db;
 const url =  'mongodb://localhost:27017/countdb';
 
 function getReg(){
-  var temp = Math.floor(Math.random() * Math.floor(3)) + 1;
+  var temp = Math.floor(Math.random() * Math.floor(13)) + 1;
   switch(temp){
-    case 1: return "IND";
-    case 2: return "AUS";
-    case 3: return "USA";
+    case 1: return "India";
+    case 2: return "Austrlia";
+    case 3: return "United States";
+    case 4: return "Germany";
+    case 5: return "Malaysia";
+    case 6: return "Sri Lanka";
+    case 7: return "Pakistan";
+    case 8: return "United Kingdom";
+    case 9: return "China";
+    case 10: return "New Zeland";
+    case 11: return "Canada";
+    case 12: return "Mexico";
+    case 13: return "Brazil";
   }
 }
 

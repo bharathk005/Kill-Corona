@@ -51,10 +51,14 @@
     cursor: pointer;
     outline: none;
     color: #fff;
-    background-color: #008CBA;
+    background-color: rgb(62, 180, 219);
     border: none;
-    border-radius: 15px;
+    border-radius: 40px;
     box-shadow: 0 9px #999;
+    width: 100;
+    height: 100px;
+    margin-left: 10px;
+    margin-right: 10px;
     /* position: absolute; */
     /* top: 50%; */
   }
@@ -113,6 +117,17 @@
   animation-name: imgfade;
   animation-duration: 5.5s;
 }
+
+.waterclass{
+  position: absolute;
+  display: block;
+} 
+
+.soapclass{
+  position: absolute;
+  display: block;
+} 
+
 
 .popup{
   display: block;

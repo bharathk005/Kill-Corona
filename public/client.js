@@ -73,20 +73,20 @@ function sortByProperty(property){
 }
 
 function addtoChart(data,max){
-  console.log(data.name,data.val);
   var list = document.getElementById("clist");
   var p = document.createElement("p");
+  p.setAttribute('id',data.name);
   p.textContent = data.name;
   list.appendChild(p);
   var div1 = document.createElement("div");
   div1.setAttribute('class','chart');
   var div2 = document.createElement('div');
   div2.setAttribute('class','C');
-  console.log((data.val/max * 100) + '%');
   div2.style.width = (data.val/max * 100) + '%';
   div2.textContent = data.val;
   div1.appendChild(div2);
   list.appendChild(div1);
+  
 }
 
 function pollreg(){
@@ -99,7 +99,7 @@ function pollreg(){
     data.sort(sortByProperty("val"));
     var max = data[0].val;
     for(d in data){
-      addtoChart(data[d],max);
+          addtoChart(data[d],max);
     }
   })
   .catch(function(error) {
@@ -172,7 +172,7 @@ function story(){
     if(seq == 1){
       wait = true;
       setTimeout(function(){
-        insertImg("./res/N31.png","rtxt","fade",100,150,"NAMASTE!");
+        insertImg("./res/N3.png","rtxt","fade",100,150,"NAMASTE!");
     },2000);
      }
 
@@ -211,11 +211,55 @@ function story(){
    },2000);
     }
 
+    if(seq == 7){
+      wait = false;
+      var chat = document.getElementById("chat");
+      chat.textContent = "Drama is over. Now Waste this Moment!";
+    }
   }
 }
 
+function waterdrop(){
+  var element = document.getElementById('water');
+  var topPos = element.getBoundingClientRect().top + window.scrollY - 30;
+  var leftPos = element.getBoundingClientRect().left + window.scrollX + element.width;
+
+  var wdrop = document.createElement('img');
+  wdrop.setAttribute('class','waterclass');
+  wdrop.setAttribute('id','tempw');
+  wdrop.style.left = leftPos +'px';
+  wdrop.style.top = topPos +'px';
+  wdrop.width = 40;
+  wdrop.height = 60;
+  wdrop.src = "./res/wd.png";
+  document.body.appendChild(wdrop);
+  movedrop(wdrop.style.left,wdrop.style.top);
+}
+
+function soapdrop(){
+  var element = document.getElementById('soap');
+  var topPos = element.getBoundingClientRect().top + window.scrollY - 30;
+  var leftPos = element.getBoundingClientRect().left + window.scrollX;
+
+  var sdrop = document.createElement('img');
+  sdrop.setAttribute('class','soapclass');
+  sdrop.setAttribute('id','temps');
+  sdrop.style.left = leftPos +'px';
+  sdrop.style.top = topPos +'px';
+  sdrop.width = 60;
+  sdrop.height = 60;
+  sdrop.src = "./res/sd.png";
+  document.body.appendChild(sdrop);
+  movedrop(sdrop.style.left,sdrop.style.top);
+}
+
 $(document).ready(function(){
-    document.getElementById("waste").addEventListener('click',cupd);
+  var waterd = document.getElementById("water");
+  var soapd = document.getElementById("soap");
+    waterd.addEventListener('click',cupd);
+    soapd.addEventListener('click',cupd);
+    waterd.addEventListener('click',waterdrop);
+    soapd.addEventListener('click',soapdrop);
     gt = document.getElementById("gt");
     av = document.getElementById("av");
     pt = document.getElementById("pt");
@@ -235,7 +279,8 @@ $(document).ready(function(){
         count = 0;
     }
     pt.innerHTML = count;
-    setInterval(pollclick,1000);
+    setInterval(pollclick,500);
+    //setInterval(pollreg,500);
     pollreg();
     if(play){
     setInterval(story,500);

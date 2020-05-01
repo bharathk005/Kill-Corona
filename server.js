@@ -43,15 +43,13 @@ MongoClient.connect(url, (err, database) => {
     res.sendFile(__dirname + '/index.html');
   });
 
- 
-app.post('/clicked', (req, res) => {
-    const click = {clickTime: new Date()};
+  app.post('/killed', (req, res) => {
 
-    db.collection('clicks').updateOne({},{ $inc: {gt:1}}, (err, result) => {
+    db.collection('kills').updateOne({},{ $inc: {gt:1}}, (err, result) => {
         if (err) {
           return console.log(err);
         }
-        console.log('click added to db');
+        console.log('kill added to db');
         
       });
     var reg = getReg();
@@ -64,26 +62,65 @@ app.post('/clicked', (req, res) => {
         
       });
     
-      var table;
-      var avg = 1;
-      db.collection('clicks').findOne({}, function(err,result){
-          if(err) return console.log(err);
-          avg = result.gt/result.tusers;
-          db.collection('clicks').updateOne({},{ $set: {av:avg}}, (err, result) => {
-              if (err) {
-                return console.log(err);
-              }
-              console.log('average updated in db');
+      // var table;
+      // var avg = 1;
+      // db.collection('kills').findOne({}, function(err,result){
+      //     if(err) return console.log(err);
+      //     avg = result.gt/result.tusers;
+      //     db.collection('clicks').updateOne({},{ $set: {av:avg}}, (err, result) => {
+      //         if (err) {
+      //           return console.log(err);
+      //         }
+      //         console.log('average updated in db');
               
-            });
-      });
+      //       });
+      // });
 
       res.sendStatus(201);
     
   });
 
+ 
+// app.post('/clicked', (req, res) => {
+//     const click = {clickTime: new Date()};
+
+//     db.collection('clicks').updateOne({},{ $inc: {gt:1}}, (err, result) => {
+//         if (err) {
+//           return console.log(err);
+//         }
+//         console.log('click added to db');
+        
+//       });
+//     // var reg = getReg();
+//     // console.log(reg);
+//     // db.collection('reg').updateOne({"name": reg},{ $inc: {"val":1}},{ upsert : true }, (err, result) => {
+//     //     if (err) {
+//     //       return console.log(err);
+//     //     }
+//     //     console.log('reg added to db');
+        
+//     //   });
+    
+//       var table;
+//       var avg = 1;
+//       db.collection('clicks').findOne({}, function(err,result){
+//           if(err) return console.log(err);
+//           avg = result.gt/result.tusers;
+//           db.collection('clicks').updateOne({},{ $set: {av:avg}}, (err, result) => {
+//               if (err) {
+//                 return console.log(err);
+//               }
+//               console.log('average updated in db');
+              
+//             });
+//       });
+
+//       res.sendStatus(201);
+    
+//   });
+
   app.post('/addUser', (req, res) => {
-    db.collection('clicks').updateOne({},{ $inc: {tusers:1}}, (err, result) => {
+    db.collection('kills').updateOne({},{ $inc: {tusers:1}}, (err, result) => {
       if (err) {
         return console.log(err);
       }
@@ -92,10 +129,10 @@ app.post('/clicked', (req, res) => {
 
     var table;
     var avg = 1;
-    db.collection('clicks').findOne({}, function(err,result){
+    db.collection('kills').findOne({}, function(err,result){
         if(err) return console.log(err);
         avg = result.gt/result.tusers;
-        db.collection('clicks').updateOne({},{ $set: {av:avg}}, (err, result) => {
+        db.collection('kills').updateOne({},{ $set: {av:avg}}, (err, result) => {
             if (err) {
               return console.log(err);
             }
@@ -121,9 +158,17 @@ app.post('/clicked', (req, res) => {
     
   });
 
-  app.get('/clicks', (req, res) => {
+  // app.get('/clicks', (req, res) => {
 
-    db.collection('clicks').find().toArray((err, result) => {
+  //   db.collection('clicks').find().toArray((err, result) => {
+  //     if (err) return console.log(err);
+  //     res.send(result);
+  //   });
+  // });
+
+  app.get('/kills', (req, res) => {
+
+    db.collection('kills').find().toArray((err, result) => {
       if (err) return console.log(err);
       res.send(result);
     });

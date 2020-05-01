@@ -1,6 +1,6 @@
-console.log('in js');
 
-var cookie;
+var killcookie;
+var clikccookie;
 var count = 0;
 var gt,av,pt;
 var wait = false;
@@ -17,6 +17,8 @@ var waterimpact = false;
 var kills = 0;
 var clicksperkill = 0;
 var splashdelay = 2000;
+
+var killtest = 25;
 
 function addComma() { 
 
@@ -35,7 +37,6 @@ function addCookie(name,value,t){
         date.setTime(date.getTime() + (t*24*60*60*1000));
         exp = "; expires=" + date.toUTCString();
         document.cookie = name + "=" + (value || "")  + exp + "; path=/";
-        console.log("added cookie");
     }
 }
 
@@ -50,14 +51,13 @@ function getCookie(cname) {
       }
       if (c.indexOf(name) == 0) {
         return c.substring(name.length, c.length);
-        console.log("found cookie");
       }
     }
     return "";
   }
 
-function pollclick(){
-    fetch('/clicks', {method: 'GET'})
+function pollkills(){
+    fetch('/kills', {method: 'GET'})
     .then(function(response) {
       if(response.ok) return response.json();
       throw new Error('Request failed.');
@@ -69,7 +69,6 @@ function pollclick(){
     .catch(function(error) {
       console.log(error);
     });
-    // addComma();
 }
 
 function sortByProperty(property){  
@@ -122,19 +121,19 @@ function pollreg(){
 function cupd(){
     console.log('button clicked');
     count = count + 1;
-    addCookie("wtdmts2020",count.toString(),365)
-    pt.innerHTML = Number(count).toLocaleString('en-US');
-    fetch('/clicked', {method: 'POST'})
-    .then(function(response) {
-      if(response.ok) {
-        console.log('Click was recorded');
-        return;
-      }
-      throw new Error('Request failed.');
-    })
-    .catch(function(error) {
-      console.log(error);
-    });
+    addCookie("killcor2020clicks",count.toString(),365)
+    //pt.innerHTML = Number(count).toLocaleString('en-US');
+    // fetch('/clicked', {method: 'POST'})
+    // .then(function(response) {
+    //   if(response.ok) {
+    //     console.log('Click was recorded');
+    //     return;
+    //   }
+    //   throw new Error('Request failed.');
+    // })
+    // .catch(function(error) {
+    //   console.log(error);
+    // });
 }
 
 function addUser(){
@@ -294,8 +293,19 @@ function killed(){
     comment.textContent = "Well Done! You killed one corona virus.";
     comment.style.backgroundColor = "green";
     kills++;
-    //call server to udpate kills, clicks per kill. 
-    //update cookie.
+    pt.innerHTML = Number(kills).toLocaleString('en-US')
+    fetch('/killed', {method: 'POST'})
+    .then(function(response) {
+      if(response.ok) {
+        console.log('Click was recorded');
+        return;
+      }
+      throw new Error('Request failed.');
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+    addCookie("killcor2020kills",kills.toString(),365)
 }
 
 function movedrop(id){
@@ -311,7 +321,7 @@ function movedrop(id){
     id =='tempw'? document.getElementById('water').disabled = false : document.getElementById('soap').disabled = false;
     removedrop(id);
     console.log(droppos.left - cleft);
-    if( -25 < (droppos.left-cleft) && (droppos.left-cleft) <25){
+    if( (0-killtest) < (droppos.left-cleft) && (droppos.left-cleft) < killtest){
         id =='tempw'? waterimpact = true: soapimpact = true;
         setTimeout(resetImpact,splashdelay,id);
         var comment = document.getElementById("comment");
@@ -405,22 +415,22 @@ $(document).ready(function(){
     av = document.getElementById("av");
     pt = document.getElementById("pt");
     var listen = document.getElementById("listen");
-    cookie = getCookie("wtdmts2020")
-    if(cookie != ""){
+    clickcookie = getCookie("killcor2020clicks");
+    killcookie = getCookie("killcor2020kills");
+    if(clickcookie != ""){
      //  listen.textContent = "You have already listened to the leaders. Now Waste This Moment! Consume cookie to watch again"
         play = false;
-        console.log("cookie:" + cookie);
-        count = Number(cookie);        
+        kills = killcookie != ""? Number(killcookie): 0;        
     }
     else{
    //   listen.textContent = "Listen to the leaders:"
-        console.log("calling to add cookie");
-        addCookie("wtdmts2020","0",365);
+
+        addCookie("killcor2020clicks","0",365);
         addUser();
-        count = 0;
+        kills = 0;
     }
-    pt.innerHTML = count;
-    setInterval(pollclick,500);
+    pt.innerHTML = kills;
+    setInterval(pollkills,500);
     //setInterval(pollreg,500);
     pollreg();
     if(play){

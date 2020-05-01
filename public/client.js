@@ -6,6 +6,8 @@ var gt,av,pt;
 var wait = false;
 var seq = 1;
 var play = true;
+var winterval;
+var sinterval;
 
 function addComma() { 
 
@@ -219,7 +221,32 @@ function story(){
   }
 }
 
-function waterdrop(){
+function createsplash(){
+
+}
+
+function removedrop(){
+
+  createsplash();
+}
+
+function movedrop(id){
+  var drop = document.getElementById(id);
+  if(id == 'tempw'){wtran = wtran+30;drop.style.transform = "translateY(-"+wtran+"px)";}
+  else if(id =='temps'){stran = stran+30;drop.style.transform = "translateY(-"+stran+"px)";}
+   //"translate(x,y)"
+  console.log(drop.getBoundingClientRect().top);
+  if(drop.getBoundingClientRect().top < 100) {
+    id == 'tempw'? clearInterval(winterval):clearInterval(sinterval);
+    removedrop();
+
+  }
+}
+
+var wtran;
+var stran;
+
+function createwaterdrop(){
   var element = document.getElementById('water');
   var topPos = element.getBoundingClientRect().top + window.scrollY - 30;
   var leftPos = element.getBoundingClientRect().left + window.scrollX + element.width;
@@ -229,14 +256,15 @@ function waterdrop(){
   wdrop.setAttribute('id','tempw');
   wdrop.style.left = leftPos +'px';
   wdrop.style.top = topPos +'px';
+  wtran = 0;
   wdrop.width = 40;
   wdrop.height = 60;
   wdrop.src = "./res/wd.png";
   document.body.appendChild(wdrop);
-  movedrop(wdrop.style.left,wdrop.style.top);
+  winterval = setInterval(movedrop,100,'tempw');
 }
 
-function soapdrop(){
+function createsoapdrop(){
   var element = document.getElementById('soap');
   var topPos = element.getBoundingClientRect().top + window.scrollY - 30;
   var leftPos = element.getBoundingClientRect().left + window.scrollX;
@@ -246,11 +274,12 @@ function soapdrop(){
   sdrop.setAttribute('id','temps');
   sdrop.style.left = leftPos +'px';
   sdrop.style.top = topPos +'px';
+  stran = 0;
   sdrop.width = 60;
   sdrop.height = 60;
   sdrop.src = "./res/sd.png";
   document.body.appendChild(sdrop);
-  movedrop(sdrop.style.left,sdrop.style.top);
+  sinterval = setInterval(movedrop,100,'temps');
 }
 
 $(document).ready(function(){
@@ -258,8 +287,8 @@ $(document).ready(function(){
   var soapd = document.getElementById("soap");
     waterd.addEventListener('click',cupd);
     soapd.addEventListener('click',cupd);
-    waterd.addEventListener('click',waterdrop);
-    soapd.addEventListener('click',soapdrop);
+    waterd.addEventListener('click',createwaterdrop);
+    soapd.addEventListener('click',createsoapdrop);
     gt = document.getElementById("gt");
     av = document.getElementById("av");
     pt = document.getElementById("pt");

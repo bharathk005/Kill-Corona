@@ -127,32 +127,34 @@ MongoClient.connect(url, (err, database) => {
       console.log('user added to db');
     });
 
-    var table;
-    var avg = 1;
-    db.collection('kills').findOne({}, function(err,result){
-        if(err) return console.log(err);
-        avg = result.gt/result.tusers;
-        db.collection('kills').updateOne({},{ $set: {av:avg}}, (err, result) => {
-            if (err) {
-              return console.log(err);
-            }
-            console.log('average updated in db');
+    // var table;
+    // var avg = 1;
+    // db.collection('kills').findOne({}, function(err,result){
+    //     if(err) return console.log(err);
+    //     avg = result.gt/result.tusers;
+    //     db.collection('kills').updateOne({},{ $set: {av:avg}}, (err, result) => {
+    //         if (err) {
+    //           return console.log(err);
+    //         }
+    //         console.log('average updated in db');
             
-          });
-    });
+    //       });
+    // });
 
-    //  var addr = req.headers['x-forwarded-for'] || 
-    //  req.connection.remoteAddress || 
-    //  req.socket.remoteAddress ||
-    //  (req.connection.socket ? req.connection.socket.remoteAddress : null);
-
-    //  db.collection('addr').save(addr, (err, result) => {
-    //     if (err) {
-    //       return console.log(err);
-    //     }
-    //     console.log('click added to db');
-    //     res.sendStatus(201);
-    //   });
+     var addr = req.headers['x-forwarded-for'] || 
+     req.connection.remoteAddress || 
+     req.socket.remoteAddress ||
+     (req.connection.socket ? req.connection.socket.remoteAddress : null);
+     console.log(addr);
+     var ipaddr = String(addr);
+     var obj = {ip: ipaddr};
+     db.collection('addr').insertOne(obj, (err, result) => {
+        if (err) {
+          return console.log(err);
+        }
+        console.log('addr added to db');
+        
+      });
 
     res.sendStatus(201);
     

@@ -20,7 +20,7 @@ var kills = 0;
 var clicksperkill = 0;
 var splashdelay = 2000;
 var level = 1;
-var killtest = 100; //25
+var killtest = 50; //25
 
 function addComma() { 
 

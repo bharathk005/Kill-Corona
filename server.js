@@ -35,8 +35,8 @@ MongoClient.connect(url, (err, database) => {
       return console.log(err);
     }
     db = database;
-    app.listen(8080, () => {
-      console.log('listening on 8080');
+    app.listen(80, () => {
+      console.log('listening on 80');
     });
   });
 

@@ -466,6 +466,12 @@ function createcorona(){
    cinterval = setInterval(movecorona,cspeed);
 }
 
+function toggledonate(){
+    var list =  document.getElementById("dlist");
+    list.style.visibility = list.style.visibility == 'visible'? 'hidden':'visible';
+     
+}
+
 $(document).ready(function(){
   var waterd = document.getElementById("water");
   var soapd = document.getElementById("soap");
@@ -502,4 +508,6 @@ $(document).ready(function(){
     // setInterval(story,500);
     // }
     createcorona();
+    var donate = document.getElementById("dcorona");
+    donate.addEventListener('click',toggledonate);
   });

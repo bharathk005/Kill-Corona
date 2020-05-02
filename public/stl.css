@@ -12,6 +12,21 @@
 100% {transform: translateY(-150px);}
 }
 
+@keyframes rotatec{
+  0% {transform: rotate(0deg);}
+  50% {transform: rotate(180deg);}
+  100% {transform: rotate(360deg);}
+}
+
+@keyframes jump{
+0% {transform: translateX(0px);}
+25% {transform: translateX(50px);}
+50% {transform: translateX(0px);}
+75% {transform: translateX(15px);}
+100% {transform: translateX(0px);}
+}
+
+
 #covid{
   background-color: cornsilk;
   float: left;
@@ -34,7 +49,7 @@
   width: 30%;
   padding: 5px 5px 5px;
   /* background-color: #999; */
-
+  margin-top: 50px;
   float: left;
 }
 
@@ -188,6 +203,44 @@
    font-size: 20px;
 }
 
+
+
+.donate{
+  display: block;
+  position: absolute;
+  float: left;
+}
+#dlist{
+  visibility: hidden;
+  background-color: #CEF0D4;
+  padding: 5px 5px 5px;
+}
+
+#dlist p{
+  font-family: "Times New Roman";
+  font-weight: bold;
+  font-size: 14px;
+}
+
+
+#dcorona{
+  margin-left: 5px;
+  width: 60px;
+  height: 60px;
+  animation: rotatec 2s; /*rotatec, jump*/
+  animation-iteration-count: infinite;
+}
+
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: rgb(84, 153, 218);
+  color: white;
+  text-align: center;
+}
+
 @media screen and (max-width: 768px) {
   .body { display: flex; flex-flow: column; }
   .button {
@@ -224,14 +277,9 @@
   #covid iframe{
     height: 200px;
   }
-}
-
-footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  background-color: rgb(84, 153, 218);
-  color: white;
-  text-align: center;
+  
+  #dcorona{
+    width: 35px;
+    height: 35px;
+  }
 }

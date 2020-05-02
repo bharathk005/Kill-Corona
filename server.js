@@ -18,14 +18,15 @@ function getReg(){
     case 3: return "United States";
     case 4: return "Germany";
     case 5: return "Malaysia";
-    case 6: return "Sri Lanka";
+    case 6: return "India";
     case 7: return "Pakistan";
     case 8: return "United Kingdom";
     case 9: return "China";
-    case 10: return "New Zeland";
+    case 10: return "India";
     case 11: return "Canada";
     case 12: return "Mexico";
     case 13: return "Brazil";
+    case 14: return "United States";
   }
 }
 

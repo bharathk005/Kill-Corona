@@ -5,7 +5,7 @@ var count = 0;
 var gt,av,pt;
 var wait = false;
 var seq = 1;
-var cseq = 1;
+var cseq = 0;
 var play = true;
 var winterval;
 var sinterval;
@@ -19,8 +19,11 @@ var waterimpact = false;
 var kills = 0;
 var clicksperkill = 0;
 var splashdelay = 2000;
-var level = 1;
-var killtest = 50; //25
+var level = 0;
+var killtest = 45; //25
+var dropspeed = 30;
+var cspeed = 200;
+var csin = 0.1;
 
 function addComma() { 
 
@@ -121,14 +124,14 @@ function pollreg(){
 
 
 function cupd(){
-    console.log('button clicked');
+    
     count = count + 1;
     addCookie("killcor2020clicks",count.toString(),365)
     //pt.innerHTML = Number(count).toLocaleString('en-US');
     // fetch('/clicked', {method: 'POST'})
     // .then(function(response) {
     //   if(response.ok) {
-    //     console.log('Click was recorded');
+    //     
     //     return;
     //   }
     //   throw new Error('Request failed.');
@@ -176,7 +179,7 @@ function insertImg(src,parent,animation,width,height,message){
     chat.textContent = "";
     cseq++;
     wait = false;
-  },5000);
+  },3000);
 }
 
 function story(){
@@ -271,7 +274,7 @@ function createsplashs(id){
 function resetImpact(id){
     id =='tempw'? waterimpact = false: soapimpact = false;
     document.getElementById("coronaspace").style.backgroundColor = "bisque";
-    document.getElementById("comment").textContent = "Try Again! you need be faster than corona."
+   // document.getElementById("comment").textContent = "Try Again! you need be faster than corona."
     comment.style.backgroundColor = "white";
 }
 
@@ -295,28 +298,28 @@ function celebration(){
   if(cseq == 1){
     wait = true;
     setTimeout(function(){
-      insertImg("./res/T3.png","coronaspace","fade",100,150,"Wohoo! We are saved! Thanks buddy!");
-  },2000);
+      insertImg("./res/T3.png","chat","fade",100,150,"Wohoo! We are saved! Thanks buddy!");
+  },1000);
    }
 
    if(cseq == 2){
      wait = true;
     setTimeout(function(){
-      insertImg("./res/N3.png","coronaspace","fade",100,150,"Thanks.. Well Done.");
-  },2000);
+      insertImg("./res/N3.png","chat","fade",100,150,"Thanks.. Well Done.");
+  },1000);
    }
 
   if(cseq == 3){
     wait = true;
    setTimeout(function(){
-     insertImg("./res/T1.png","coronaspace","fade",100,150,"I appreciate it..");
- },2000);
+     insertImg("./res/T1.png","chat","fade",100,150,"I appreciate it..");
+ },1000);
   }
 }
 
 function destroycorona(){
    var corona = document.getElementById("cimg");
-   corona.src = "./res/corona2killed.png";
+   corona.src = "./res/corona"+((level%2)+1)+"killed.png";
    
  setTimeout(function(){
     corona.remove()
@@ -325,15 +328,18 @@ function destroycorona(){
 
 function killed(){
    clearInterval(cinterval);
-    document.getElementById("coronaspace").style.backgroundColor = "green";
-    comment.textContent = "Well Done! You killed one corona virus.";
-    comment.style.backgroundColor = "green";
+    document.getElementById("coronaspace").style.backgroundColor = "rgb(68, 226, 121)";
+    comment.textContent = "Well Done! You killed a virus. But there are many more to go.";
+    comment.style.backgroundColor = "rgb(68, 226, 121)";
     kills++;
+    var element = document.getElementById('water');
+    element.disabled = true;
+    element = document.getElementById('soap');
+    element.disabled = true;
     pt.innerHTML = Number(kills).toLocaleString('en-US');
     fetch('/killed', {method: 'POST'})
     .then(function(response) {
       if(response.ok) {
-        console.log('Click was recorded');
         return;
       }
       throw new Error('Request failed.');
@@ -345,14 +351,18 @@ function killed(){
     destroycorona();
     celebration();
     setTimeout(function(){
+      var element = document.getElementById('water');
+      element.disabled = false;
+      element = document.getElementById('soap');
+      element.disabled = false;
       createcorona();
-   },8000);
+   },5000);
 }
 
 function movedrop(id){
   var drop = document.getElementById(id);
-  if(id == 'tempw'){wtran = wtran+30;drop.style.transform = "translateY(-"+wtran+"px)";}
-  else if(id =='temps'){stran = stran+30;drop.style.transform = "translateY(-"+stran+"px)";}
+  if(id == 'tempw'){wtran = wtran+dropspeed;drop.style.transform = "translateY(-"+wtran+"px)";}
+  else if(id =='temps'){stran = stran+dropspeed;drop.style.transform = "translateY(-"+stran+"px)";}
    //"translate(x,y)"
    var cleft = getcoronapos();
    var droppos = drop.getBoundingClientRect();
@@ -361,7 +371,6 @@ function movedrop(id){
     id == 'tempw'? clearInterval(winterval):clearInterval(sinterval);
     id =='tempw'? document.getElementById('water').disabled = false : document.getElementById('soap').disabled = false;
     removedrop(id);
-    console.log(droppos.left - cleft);
     if( (0-killtest) < (droppos.left-cleft) && (droppos.left-cleft) < killtest){
         id =='tempw'? waterimpact = true: soapimpact = true;
         setTimeout(resetImpact,splashdelay,id);
@@ -426,7 +435,7 @@ function createsoapdrop(){
 function movecorona(){
   var corona = document.getElementById("cimg");
   var tran = Math.sin(ctran) * cspacewidth/2.5;
-  ctran = ctran + 0.3;
+  ctran = ctran + csin;
   corona.style.transform = "translateX("+tran+"px)";
 }
 
@@ -443,9 +452,18 @@ function createcorona(){
    corona.style.top = topPos +'px';
    corona.width = 70;
    corona.height = 70;
-   corona.src = "./res/corona2.png";
+   level++;
+   corona.src = "./res/corona"+((level%2)+1)+".png";
    cspace.appendChild(corona);
-   cinterval = setInterval(movecorona,300);
+  
+   var lvl = document.getElementById('level');
+   lvl.textContent = "LEVEL "+level;
+   cspeed = 220 - (120>(level*20)?(level*20):120);
+   killtest = 45 - (level*3);
+   killtest = killtest < 27?27:killtest;
+   csin = (0.1 + level*0.05);
+   console.log(cspeed,killtest,csin);
+   cinterval = setInterval(movecorona,cspeed);
 }
 
 $(document).ready(function(){
@@ -474,7 +492,10 @@ $(document).ready(function(){
         kills = 0;
     }
     pt.innerHTML = kills;
-    setInterval(pollkills,500);
+    setInterval(pollkills,2000);
+    setTimeout(function(){
+      insertImg("./res/N2.png","rtxt","popup",100,150,"C'mon Kill this");
+    },5000);
     //setInterval(pollreg,500);
     pollreg();
     // if(play){

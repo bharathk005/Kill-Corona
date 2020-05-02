@@ -49,16 +49,15 @@ MongoClient.connect(url, (err, database) => {
         if (err) {
           return console.log(err);
         }
-        console.log('kill added to db');
+      
         
       });
     var reg = getReg();
-    console.log(reg);
+
     db.collection('reg').updateOne({"name": reg},{ $inc: {"val":1}},{ upsert : true }, (err, result) => {
         if (err) {
           return console.log(err);
         }
-        console.log('reg added to db');
         
       });
     
@@ -124,7 +123,7 @@ MongoClient.connect(url, (err, database) => {
       if (err) {
         return console.log(err);
       }
-      console.log('user added to db');
+  
     });
 
     // var table;
@@ -145,14 +144,13 @@ MongoClient.connect(url, (err, database) => {
      req.connection.remoteAddress || 
      req.socket.remoteAddress ||
      (req.connection.socket ? req.connection.socket.remoteAddress : null);
-     console.log(addr);
+  
      var ipaddr = String(addr);
      var obj = {ip: ipaddr};
      db.collection('addr').insertOne(obj, (err, result) => {
         if (err) {
           return console.log(err);
         }
-        console.log('addr added to db');
         
       });
 

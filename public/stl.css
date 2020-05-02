@@ -12,7 +12,23 @@
 100% {transform: translateY(-150px);}
 }
 
+#covid{
+  background-color: cornsilk;
+  float: left;
+  width: 30%;
+  margin-top: 50px;
+  margin-left: 20px;
+  text-align: center;
+}
 
+#covid a{
+  font-weight: bold;
+}
+
+#covid iframe{
+  height: 400px;
+  border: gray;
+}
 
 .dcountries{
   width: 30%;
@@ -112,10 +128,19 @@
   /* text-shadow: 2px 2px red; */
 }
 
+#level{
+  background-color: rgb(245, 222, 173);
+  font-family: "Times New Roman";
+  color: rgb(204, 79, 7);
+  font-weight: bold;
+  font-size: 18px;
+  text-shadow: 2px 2px rgb(240, 221, 221);
+}
+
 .fade{
   position: absolute;
   animation-name: imgfade;
-  animation-duration: 5.5s;
+  animation-duration: 3.5s;
 }
 
 .wsfade{
@@ -154,8 +179,30 @@
   animation-duration: 5.5s;
 }
 
+.closing{
+  text-align: center;
+  background-color: lightskyblue;
+}
+
+.stay h2{
+   font-size: 20px;
+}
+
 @media screen and (max-width: 768px) {
   .body { display: flex; flex-flow: column; }
+  .button {
+    padding: 10px 20px;
+    height: 75px;
+  }
+  .mtext{
+    padding: 7px 7px 7px;
+  }
+  .mtext .tt{
+    font-size: 20px;
+  }
+  .mtext .tn{
+    font-size: 20px;
+  }
   .btntxt {
     order: 1;
     width: 85%;
@@ -164,7 +211,19 @@
     order: 2;
     width: 85%
   }
-
+  
+  #covid{
+    order:3;
+    width: 90%;
+    margin-bottom: 20px;
+    padding: 5px;
+  }
+  #covid p{
+    font-size: 16px;
+  }
+  #covid iframe{
+    height: 200px;
+  }
 }
 
 footer {

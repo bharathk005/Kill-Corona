@@ -5,15 +5,15 @@ const MongoClient = require('mongodb').MongoClient;
 const app = express();
 const certenabled = false;
 
-app.enable('trust proxy');
+// app.enable('trust proxy');
 
-app.use (function (req, res, next) {
-        if (req.secure) {
-                next();
-        } else {
-                res.redirect('https://' + req.headers.host + req.url);
-        }
-});
+// app.use (function (req, res, next) {
+//         if (req.secure) {
+//                 next();
+//         } else {
+//                 res.redirect('https://' + req.headers.host + req.url);
+//         }
+// });
 
 app.use(express.static('public'));
 
@@ -49,19 +49,20 @@ function getReg(){
   var temp = Math.floor(Math.random() * Math.floor(13)) + 1;
   switch(temp){
     case 1: return "India";
-    case 2: return "Austrlia";
+    case 2: return "Australia";
     case 3: return "United States";
     case 4: return "Germany";
-    case 5: return "Malaysia";
+    case 5: return "United States";
     case 6: return "India";
     case 7: return "Pakistan";
     case 8: return "United Kingdom";
     case 9: return "China";
     case 10: return "India";
     case 11: return "Canada";
-    case 12: return "Mexico";
-    case 13: return "Brazil";
+    case 12: return "India";
+    case 13: return "Malaysia";
     case 14: return "United States";
+    case 15: return "Sri Lanka";
   }
 }
 
@@ -206,13 +207,16 @@ MongoClient.connect(url, (err, database) => {
     
   });
 
-  // app.get('/clicks', (req, res) => {
+  app.post('/maxlvl', (req, res) => {
+    db.collection('kills').updateOne({},{ $inc: {maxlvl:1}}, (err, result) => {
+      if (err) {
+        return console.log(err);
+      }
 
-  //   db.collection('clicks').find().toArray((err, result) => {
-  //     if (err) return console.log(err);
-  //     res.send(result);
-  //   });
-  // });
+    });
+    res.sendStatus(201);
+    
+  });
 
   app.get('/kills', (req, res) => {
 

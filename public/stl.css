@@ -110,16 +110,18 @@
     text-align: center;
   }
   .mtext{
-    padding: 10px 10px 10px;
+    padding: 7px 7px 7px;
     background-color: #CEF0D4;
   }
   .mtext .tt{
     /* text-align: center; */
-    font-size: 24px;
+    margin-top: -5px;
+    font-size: 20px;
     color: rgb(99, 168, 112);
   }
   .mtext .tn{
-    font-size: 24px;
+    margin-top: -10px;
+    font-size: 20px;
     color: rgb(212, 173, 115);
   }
 #bparent{

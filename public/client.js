@@ -19,13 +19,14 @@ var waterimpact = false;
 var kills = 0;
 var clicksperkill = 0;
 var splashdelay = 2000;
-var level = 0;
+var level = 1;
 var killtest = 45; //25
 var dropspeed = 30;
 var cspeed = 200;
 var csin = 0.1;
 var squeue = [];
 var wqueue = [];
+var maxlevel = 0;
 
 function addComma() { 
 
@@ -72,6 +73,8 @@ function pollkills(){
     .then(function(data) {
       gt.innerHTML = Number(data[0].gt).toLocaleString('en-US');
       av.innerHTML = Number(data[0].av).toLocaleString('en-US');
+      maxlevel = Number(data[0].maxlvl).toLocaleString('en-US');
+      ml.innerHTML = maxlevel;
     })
     .catch(function(error) {
       console.log(error);
@@ -115,8 +118,8 @@ function pollreg(){
   .then(function(data) {
     data.sort(sortByProperty("val"));
     var max = data[0].val;
-    for(d in data){
-          addtoChart(data[d],max);
+    for(var i=0;i<10;i++){
+          addtoChart(data[i],max);
     }
   })
   .catch(function(error) {
@@ -342,6 +345,19 @@ function killed(){
     comment.style.backgroundColor = "rgb(68, 226, 121)";
     killcleanup();
     kills++;
+    level++;
+    if(level > maxlevel){
+      fetch('/maxlvl', {method: 'POST'})
+      .then(function(response) {
+        if(response.ok) {
+          return;
+        }
+        throw new Error('Request failed.');
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+     }
     var element = document.getElementById('water');
     element.disabled = true;
     element = document.getElementById('soap');
@@ -513,7 +529,7 @@ function createcorona(){
    corona.style.top = topPos +'px';
    corona.width = 70;
    corona.height = 70;
-   level++;
+
    corona.src = "./res/corona"+((level%2)+1)+".png";
    cspace.appendChild(corona);
   

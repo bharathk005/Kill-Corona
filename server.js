@@ -4,7 +4,21 @@ const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
 const app = express();
 const certenabled = false;
+
+app.enable('trust proxy');
+
+app.use (function (req, res, next) {
+        if (req.secure) {
+                next();
+        } else {
+                res.redirect('https://' + req.headers.host + req.url);
+        }
+});
+
 app.use(express.static('public'));
+
+var httpServer;
+var httpsServer;
 
 let db;
 
@@ -26,8 +40,8 @@ const credentials = {
 	ca: ca
 };
 
-const httpServer = http.createServer(app);
-const httpsServer = https.createServer(credentials, app);
+httpServer = http.createServer(app);
+httpsServer = https.createServer(credentials, app);
 }
 /// CERT
 

@@ -3,12 +3,33 @@ console.log('server running');
 const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
 const app = express();
-
+const certenabled = false;
 app.use(express.static('public'));
 
 let db;
 
 const url =  'mongodb://localhost:27017/countdb';
+if(certenabled){
+/// CERT
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
+
+// Certificate
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/killcorona.icu/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/killcorona.icu/cert.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/killcorona.icu/chain.pem', 'utf8');
+
+const credentials = {
+	key: privateKey,
+	cert: certificate,
+	ca: ca
+};
+
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(credentials, app);
+}
+/// CERT
 
 function getReg(){
   var temp = Math.floor(Math.random() * Math.floor(13)) + 1;
@@ -35,9 +56,19 @@ MongoClient.connect(url, (err, database) => {
       return console.log(err);
     }
     db = database;
+  if(certenabled){
+    httpServer.listen(80, () => {
+      console.log('HTTP Server running on port 80');
+    });
+    
+    httpsServer.listen(443, () => {
+      console.log('HTTPS Server running on port 443');
+    }); }
+    else {
     app.listen(80, () => {
       console.log('listening on 80');
     });
+    }
   });
 
   app.get('/', (req, res) => {
@@ -50,16 +81,16 @@ MongoClient.connect(url, (err, database) => {
         if (err) {
           return console.log(err);
         }
-        console.log('kill added to db');
+       // console.log('kill added to db');
         
       });
     var reg = getReg();
-    console.log(reg);
+  //  console.log(reg);
     db.collection('reg').updateOne({"name": reg},{ $inc: {"val":1}},{ upsert : true }, (err, result) => {
         if (err) {
           return console.log(err);
         }
-        console.log('reg added to db');
+     //   console.log('reg added to db');
         
       });
     
@@ -125,7 +156,7 @@ MongoClient.connect(url, (err, database) => {
       if (err) {
         return console.log(err);
       }
-      console.log('user added to db');
+   //   console.log('user added to db');
     });
 
     // var table;
@@ -146,14 +177,14 @@ MongoClient.connect(url, (err, database) => {
      req.connection.remoteAddress || 
      req.socket.remoteAddress ||
      (req.connection.socket ? req.connection.socket.remoteAddress : null);
-     console.log(addr);
+    // console.log(addr);
      var ipaddr = String(addr);
      var obj = {ip: ipaddr};
      db.collection('addr').insertOne(obj, (err, result) => {
         if (err) {
           return console.log(err);
         }
-        console.log('addr added to db');
+      //  console.log('addr added to db');
         
       });
 

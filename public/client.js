@@ -24,6 +24,8 @@ var killtest = 45; //25
 var dropspeed = 30;
 var cspeed = 200;
 var csin = 0.1;
+var squeue = [];
+var wqueue = [];
 
 function addComma() { 
 
@@ -246,33 +248,33 @@ function createsplashw(id){
   splash.style.top = topPos +'px';
   splash.width = 40;
   splash.height = 60;
-  splash.src = "./res/"+id+".png";
+  splash.src = "./res/temp"+id[0]+".png";
   document.body.appendChild(splash);
   setTimeout(function(){
     document.getElementById('splash'+id).remove();
   },splashdelay);
 }
 
-function createsplashs(id){
-  var element = document.getElementById(id);
-  var topPos = element.getBoundingClientRect().top ;
-  var leftPos = element.getBoundingClientRect().left ;
-  var splash = document.createElement('img');
-  splash.setAttribute('class','wsfade');
-  splash.setAttribute('id','splash'+id);
-  splash.style.left = leftPos +'px';
-  splash.style.top = topPos +'px';
-  splash.width = 40;
-  splash.height = 60;
-  splash.src = "./res/"+id+".png";
-  document.body.appendChild(splash);
-  setTimeout(function(){
-    document.getElementById('splash'+id).remove();
-  },splashdelay);
-}
+// function createsplashs(id){
+//   var element = document.getElementById(id);
+//   var topPos = element.getBoundingClientRect().top ;
+//   var leftPos = element.getBoundingClientRect().left ;
+//   var splash = document.createElement('img');
+//   splash.setAttribute('class','wsfade');
+//   splash.setAttribute('id','splash'+id);
+//   splash.style.left = leftPos +'px';
+//   splash.style.top = topPos +'px';
+//   splash.width = 40;
+//   splash.height = 60;
+//   splash.src = "./res/"+id+".png";
+//   document.body.appendChild(splash);
+//   setTimeout(function(){
+//     document.getElementById('splash'+id).remove();
+//   },splashdelay);
+// }
 
 function resetImpact(id){
-    id =='tempw'? waterimpact = false: soapimpact = false;
+    id[0] =='w'? waterimpact = false: soapimpact = false;
     document.getElementById("coronaspace").style.backgroundColor = "bisque";
    // document.getElementById("comment").textContent = "Try Again! you need be faster than corona."
     comment.style.backgroundColor = "white";
@@ -280,8 +282,9 @@ function resetImpact(id){
 
 function removedrop(id){
   var drop = document.getElementById(id);
-  if(id =='tempw'){createsplashw(id);}
-  else if(id =='temps'){createsplashs(id);}
+  createsplashw(id);
+  // if(id[0] =='w'){createsplashw(id);}
+  // else{createsplashs(id);}
   
   drop.remove();
  
@@ -359,7 +362,51 @@ function killed(){
    },5000);
 }
 
-function movedrop(id){
+function movedrop(){
+  var drop;
+  var tran;
+  var did;  
+  var cleft;
+  var droppos;
+  var cspace;
+  var comment;
+  for(d in wqueue){
+     did = wqueue[d];
+     drop = document.getElementById(did);
+     tran = parseInt(drop.style.top);
+    tran = tran - dropspeed;
+    drop.style.top = tran+'px';
+
+    cleft = getcoronapos();
+    droppos = drop.getBoundingClientRect();
+    cspace =  document.getElementById("coronaspace");
+    if( droppos.top < cspace.getBoundingClientRect().top + 27) {
+      //if drop has reached,  remove the drop from queue.
+      wqueue.splice(d,1);
+      removedrop(did);
+      if( (0-killtest) < (droppos.left-cleft) && (droppos.left-cleft) < killtest){
+        did[0] == 'w'? waterimpact = true: soapimpact = true;
+        setTimeout(resetImpact,splashdelay,did);
+          comment = document.getElementById("comment");
+        if(waterimpact && soapimpact){
+          killed()
+        }
+        else if(waterimpact){
+          comment.textContent = "Corona is hit by Water. Hit is with Soap before water dries out";
+          comment.style.backgroundColor = "rgb(154, 207, 243)";
+            document.getElementById("coronaspace").style.backgroundColor = "rgb(154, 207, 243)";
+        }
+        else if(soapimpact){
+          comment.textContent = "Corona is hit by SOAP. Hit is with Water before SOAP dries out";
+          comment.style.backgroundColor = "rgb(250, 121, 61)"
+          document.getElementById("coronaspace").style.backgroundColor = "rgb(250, 121, 61)";
+      }
+
+    }
+    }
+
+  }
+/*
   var drop = document.getElementById(id);
   if(id == 'tempw'){wtran = wtran+dropspeed;drop.style.transform = "translateY(-"+wtran+"px)";}
   else if(id =='temps'){stran = stran+dropspeed;drop.style.transform = "translateY(-"+stran+"px)";}
@@ -391,27 +438,31 @@ function movedrop(id){
 
     }
     
-  }
+  }*/
 }
 
-
+var wid = 0;
+var sid = 0;
 
 function createwaterdrop(){
   var element = document.getElementById('water');
   var topPos = element.getBoundingClientRect().top + window.scrollY - 30;
   var leftPos = element.getBoundingClientRect().left + window.scrollX + element.width;
   element.disabled = true;
+  setTimeout(function(){element.disabled = false;},500);
   var wdrop = document.createElement('img');
   wdrop.setAttribute('class','waterclass');
-  wdrop.setAttribute('id','tempw');
+  wid++;
+  wdrop.setAttribute('id','w'+wid);
+  wqueue.push('w'+wid);
   wdrop.style.left = leftPos +'px';
   wdrop.style.top = topPos +'px';
-  wtran = 0;
+ // wtran = 0;
   wdrop.width = 30;
   wdrop.height = 50;
   wdrop.src = "./res/wd.png";
   document.body.appendChild(wdrop);
-  winterval = setInterval(movedrop,100,'tempw');
+ // winterval = setInterval(movedrop,100,'tempw');
 }
 
 function createsoapdrop(){
@@ -419,17 +470,20 @@ function createsoapdrop(){
   var topPos = element.getBoundingClientRect().top + window.scrollY - 30;
   var leftPos = element.getBoundingClientRect().left + window.scrollX;
   element.disabled = true;
+  setTimeout(function(){element.disabled = false;},500);
   var sdrop = document.createElement('img');
   sdrop.setAttribute('class','soapclass');
-  sdrop.setAttribute('id','temps');
+  sid++;
+  sdrop.setAttribute('id','s'+sid);
+  wqueue.push('s'+sid);
   sdrop.style.left = leftPos +'px';
   sdrop.style.top = topPos +'px';
-  stran = 0;
+ // stran = 0;
   sdrop.width = 60;
   sdrop.height = 60;
   sdrop.src = "./res/sd.png";
   document.body.appendChild(sdrop);
-  sinterval = setInterval(movedrop,100,'temps');
+ // sinterval = setInterval(movedrop,100,'temps');
 }
 
 function movecorona(){
@@ -507,6 +561,7 @@ $(document).ready(function(){
     // if(play){
     // setInterval(story,500);
     // }
+    dropinterval = setInterval(movedrop,100);
     createcorona();
     var donate = document.getElementById("dcorona");
     donate.addEventListener('click',toggledonate);

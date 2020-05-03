@@ -31,7 +31,7 @@
   background-color: cornsilk;
   float: left;
   width: 30%;
-  margin-top: 50px;
+  margin-top: 20px;
   margin-left: 20px;
   text-align: center;
 }
@@ -241,6 +241,8 @@ footer {
   text-align: center;
 }
 
+
+
 @media screen and (max-width: 768px) {
   .body { display: flex; flex-flow: column; }
   .button {
@@ -262,7 +264,8 @@ footer {
   }
   .dcountries {
     order: 2;
-    width: 85%
+    width: 85%;
+    margin-top: 20px;
   }
   
   #covid{

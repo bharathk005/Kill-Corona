@@ -329,11 +329,18 @@ function destroycorona(){
  },2000);
 }
 
+function killcleanup(){
+  for(d in wqueue){
+    removedrop(wqueue[d]);}
+  wqueue.splice(0, wqueue.length);
+}
+
 function killed(){
    clearInterval(cinterval);
     document.getElementById("coronaspace").style.backgroundColor = "rgb(68, 226, 121)";
     comment.textContent = "Well Done! You killed a virus. But there are many more to go.";
     comment.style.backgroundColor = "rgb(68, 226, 121)";
+    killcleanup();
     kills++;
     var element = document.getElementById('water');
     element.disabled = true;
@@ -449,7 +456,7 @@ function createwaterdrop(){
   var topPos = element.getBoundingClientRect().top + window.scrollY - 30;
   var leftPos = element.getBoundingClientRect().left + window.scrollX + element.width;
   element.disabled = true;
-  setTimeout(function(){element.disabled = false;},500);
+  setTimeout(function(){element.disabled = false;},700);
   var wdrop = document.createElement('img');
   wdrop.setAttribute('class','waterclass');
   wid++;
@@ -470,7 +477,7 @@ function createsoapdrop(){
   var topPos = element.getBoundingClientRect().top + window.scrollY - 30;
   var leftPos = element.getBoundingClientRect().left + window.scrollX;
   element.disabled = true;
-  setTimeout(function(){element.disabled = false;},500);
+  setTimeout(function(){element.disabled = false;},700);
   var sdrop = document.createElement('img');
   sdrop.setAttribute('class','soapclass');
   sid++;
